@@ -36,7 +36,6 @@ def show_all_pokemons(request):
             folium_map,
             pokemon_entity.lat,
             pokemon_entity.lon,
-            pokemon_img_url,
             request.build_absolute_uri(pokemon_entity.pokemon.image.url)
         )
 
