@@ -1,7 +1,9 @@
+from django.http.response import Http404
 import folium
 import json
 
 from django.http import HttpResponseNotFound
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from pokemon_entities.models import Pokemon
 from pokemon_entities.models import PokemonEntity
@@ -56,7 +58,11 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(id=pokemon_id)
+    try:
+        pokemon = Pokemon.objects.get(id=pokemon_id)
+    except Pokemon.DoesNotExist:
+        raise Http404(f'Pokemon does not exist with this id={pokemon_id}')
+
     pokemon_img_url = request.build_absolute_uri(pokemon.image.url) if pokemon.image else None
 
     previous_evolution = None
